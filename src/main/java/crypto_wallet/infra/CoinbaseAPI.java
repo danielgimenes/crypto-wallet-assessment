@@ -1,6 +1,6 @@
 package crypto_wallet.infra;
 
-import crypto_wallet.domain.PriceAPI;
+import crypto_wallet.domain.AssetPriceAPI;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.function.Function;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-public class CoinbaseAPI implements PriceAPI {
+public class CoinbaseAPI implements AssetPriceAPI {
 
     private final Logger logger = Logger.getLogger(CoinbaseAPI.class.getName());
 
@@ -21,7 +21,7 @@ public class CoinbaseAPI implements PriceAPI {
     public Map<String, BigDecimal> fetchPrices(List<String> symbols) {
         try {
             return threadPool.submit(() -> symbols.parallelStream().collect(
-                    Collectors.toMap(Function.identity(), this::fetchAssetPrice))).get();
+                    Collectors.toConcurrentMap(Function.identity(), this::fetchAssetPrice))).get();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         } catch (ExecutionException e) {

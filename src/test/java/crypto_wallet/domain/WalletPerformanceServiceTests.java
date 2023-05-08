@@ -8,20 +8,18 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-
-public class WalletServiceTests {
+public class WalletPerformanceServiceTests {
 
     @Test
-    public void retrieveWalletPerformance() {
+    public void reportWhenMultipleAssets() {
         List<CryptoAsset> assets = new ArrayList<>();
         assets.add(new CryptoAsset("BTC", 1, new BigDecimal("1000.00")));
         assets.add(new CryptoAsset("ETH", 2, new BigDecimal("1000.00")));
 
-        WalletService walletService = new WalletService(new CoinbaseAPI());
+        WalletPerformanceService walletService = new WalletPerformanceService(new CoinbaseAPI());
         WalletPerformance expected = new WalletPerformance(
                 new BigDecimal("20000.00"),
                 "BTC",
@@ -29,6 +27,6 @@ public class WalletServiceTests {
                 "ETH",
                 50.0
         );
-        assertEquals(expected, walletService.performance(assets));
+        assertEquals(expected, walletService.report(assets));
     }
 }
