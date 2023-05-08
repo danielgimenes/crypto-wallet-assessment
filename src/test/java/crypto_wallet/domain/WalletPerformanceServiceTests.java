@@ -2,7 +2,7 @@ package crypto_wallet.domain;
 
 import crypto_wallet.domain.data.CryptoAsset;
 import crypto_wallet.domain.data.WalletPerformance;
-import crypto_wallet.infra.CoinbaseAPI;
+import crypto_wallet.api.CoinbaseAPI;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
