@@ -16,13 +16,39 @@ import java.util.Map;
 import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class CoinbaseAPITests {
 
     @Test
-    public void fetchPrices() throws IOException, InterruptedException {
+    public void fetchPricesWhenSingleAsset() throws IOException, InterruptedException {
+        List<String> symbols = List.of("DOGE");
+        HttpClient mockHttpClient = mock(HttpClient.class);
+
+        // DOGE
+        mockHttpResponse(
+                mockHttpClient,
+                url -> url.startsWith("https://api.coincap.io/v2/assets?search=DOGE"),
+                "{\"data\": [{\"id\": \"dogecoin\"}]}"
+        );
+        mockHttpResponse(
+                mockHttpClient,
+                url -> url.contains("dogecoin/history"),
+                "{\"data\": [{\"priceUsd\": \"2222222.00\"}]}"
+        );
+
+        CoinbaseAPI api = new CoinbaseAPI(mockHttpClient);
+
+        Map<String, BigDecimal> expected = Map.of(
+                "DOGE", new BigDecimal("2222222.00")
+        );
+        assertEquals(expected, api.fetchPrices(symbols));
+    }
+
+    @Test
+    public void fetchPricesWhenMultipleAssets() throws IOException, InterruptedException {
         List<String> symbols = List.of("BTC", "ETH");
         HttpClient mockHttpClient = mock(HttpClient.class);
 
@@ -70,5 +96,11 @@ public class CoinbaseAPITests {
         when(mockSearchAssetResponse.body()).thenReturn(responseBody);
         when(mockSearchAssetResponse.statusCode()).thenReturn(200);
         when(mockHttpClient.send(MockitoHamcrest.argThat(reqArgMatcher), Mockito.any())).thenReturn(mockSearchAssetResponse);
+    }
+
+    @Test
+    public void fetchPricesWhenEmptyAssets() {
+        CoinbaseAPI api = new CoinbaseAPI();
+        assertTrue(api.fetchPrices(List.of()).isEmpty());
     }
 }
