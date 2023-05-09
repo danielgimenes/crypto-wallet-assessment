@@ -37,17 +37,21 @@ public class NumberFormatter {
         doubleFormatter.setMinimumFractionDigits(doubleFractionDigits);
     }
 
-    public BigDecimal parseMoneyOrNull(String value) {
+    private NumberFormatter(DecimalFormat moneyFormatter, DecimalFormat doubleFormatter,
+                            int moneyFractionDigits, RoundingMode roundingMode) {
+        this.moneyFormatter = moneyFormatter;
+        this.doubleFormatter = doubleFormatter;
+        this.moneyFractionDigits = moneyFractionDigits;
+        this.roundingMode = roundingMode;
+    }
+
+    public BigDecimal parseMoney(String value) {
         try {
-            return parseMoney(value);
+            return BigDecimal.valueOf(moneyFormatter.parse(value).doubleValue())
+                    .setScale(moneyFractionDigits, moneyFormatter.getRoundingMode());
         } catch (ParseException e) {
             return null;
         }
-    }
-
-    public BigDecimal parseMoney(String value) throws ParseException {
-        return BigDecimal.valueOf(moneyFormatter.parse(value).doubleValue())
-                .setScale(moneyFractionDigits, moneyFormatter.getRoundingMode());
     }
 
     public String formatMoney(BigDecimal value) {
@@ -63,6 +67,17 @@ public class NumberFormatter {
         formatter.setMaximumFractionDigits(fractionDigits);
         formatter.setMinimumFractionDigits(fractionDigits);
         return formatter.format(value);
+    }
+
+    @Override
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
+    public NumberFormatter clone() {
+        return new NumberFormatter(
+                (DecimalFormat) moneyFormatter.clone(), // not thread-safe
+                (DecimalFormat) doubleFormatter.clone(), // not thread-safe
+                moneyFractionDigits,
+                roundingMode
+        );
     }
 
 }

@@ -27,7 +27,7 @@ public class ConsoleAppIntegrationTests {
     }
 
     @Test
-    public void walletPerformanceWhenMultipleAssets() throws IOException {
+    public void walletPerformanceWhenTestSample() throws IOException {
         String path = createTempFileWithContent(
                 """
                 symbol,quantity,price
@@ -41,6 +41,28 @@ public class ConsoleAppIntegrationTests {
         ConsoleApp.main(new String[] { path });
 
         String expectedPrint = "total=16984.62,best_asset=BTC,best_performance=1.51,worst_asset=ETH,worst_performance=1.01\n";
+        assertEquals(expectedPrint, output.toString());
+    }
+
+    @Test
+    public void walletPerformanceWhenMultipleAssets() throws IOException {
+        String path = createTempFileWithContent(
+                """
+                symbol,quantity,price
+                BTC,0.12345,37870.5058
+                ETH,4.89532,2004.9774
+                DOGE,32344.2222,0.3000
+                ADA,2000.99999,2.5000
+                USDT,4.999,0.59234
+                XRP,333.222,0.40999
+                """
+        );
+        final ByteArrayOutputStream output = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(output));
+
+        ConsoleApp.main(new String[] { path });
+
+        String expectedPrint = "total=21694.72,best_asset=XRP,best_performance=2.37,worst_asset=DOGE,worst_performance=0.20\n";
         assertEquals(expectedPrint, output.toString());
     }
 

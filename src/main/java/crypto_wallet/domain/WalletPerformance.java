@@ -22,7 +22,7 @@ public final class WalletPerformance {
                     return price.doubleValue() * asset.quantity();
                 })
                 .reduce(Double::sum)
-                .map(total -> formatter.parseMoneyOrNull(String.valueOf(total)))
+                .map(total -> formatter.parseMoney(String.valueOf(total)))
                 .orElseThrow();
     }
 

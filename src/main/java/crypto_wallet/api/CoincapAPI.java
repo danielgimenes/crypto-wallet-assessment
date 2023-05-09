@@ -30,13 +30,13 @@ public class CoincapAPI implements AssetPriceAPI {
 
     private final NumberFormatter numberFormatter;
 
-    private final Logger logger = Logger.getLogger(CoincapAPI.class.getName());
+    private static final int PARALLELISM = 3;
 
-    private final ForkJoinPool threadPool = new ForkJoinPool(3);
+    private final ForkJoinPool threadPool = new ForkJoinPool(PARALLELISM);
 
-    private final String SEARCH_ASSET_BASE_URL = "https://api.coincap.io/v2/assets?search=%s&limit=1";
-    private final String ASSET_HISTORY_BASE_URL = "https://api.coincap.io/v2/assets/%s/history?interval=d1&start=1617753600000&end=1617753601000";
-    private final Duration REQUEST_TIMEOUT = Duration.of(10, SECONDS);
+    private static final String SEARCH_ASSET_BASE_URL = "https://api.coincap.io/v2/assets?search=%s&limit=1";
+    private static final String ASSET_HISTORY_BASE_URL = "https://api.coincap.io/v2/assets/%s/history?interval=d1&start=1617753600000&end=1617753601000";
+    private static final Duration REQUEST_TIMEOUT = Duration.of(10, SECONDS);
 
     public CoincapAPI(NumberFormatter numberFormatter) {
         this.httpClient = HttpClient.newHttpClient();
@@ -61,24 +61,18 @@ public class CoincapAPI implements AssetPriceAPI {
     }
 
     private BigDecimal fetchAssetPrice(String symbol) {
-        logger.info(String.format("[%s] fetching price of '%s'", Thread.currentThread().getName(), symbol));
-        long start = System.currentTimeMillis();
         try {
-            logger.info(String.format("[%s] fetching asset id of '%s'", Thread.currentThread().getName(), symbol));
             String assetId = fetchAssetId(symbol);
-            logger.info(String.format("[%s] '%s' asset id is '%s'", Thread.currentThread().getName(), symbol, assetId));
+            String priceRaw = fetchPrice(assetId);
 
-            BigDecimal price = numberFormatter.parseMoney(fetchPrice(assetId));
-            long elapsed = System.currentTimeMillis() - start;
-            logger.info(String.format("[%s] got '%s' price of %s after %d ms", Thread.currentThread().getName(), symbol, price.toString(), elapsed));
-            return price;
+            // formatters aren't thread-safe! let's clone it before parsing
+            NumberFormatter formatter = numberFormatter.clone();
+            return formatter.parseMoney(priceRaw);
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        } catch (ParseException e) {
             throw new RuntimeException(e);
         }
     }
