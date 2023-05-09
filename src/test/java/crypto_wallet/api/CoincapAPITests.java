@@ -12,6 +12,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
+import static test_utils.Formatters.*;
 import static test_utils.HttpMock.mockHttpResponse;
 
 public class CoincapAPITests {
@@ -33,7 +34,7 @@ public class CoincapAPITests {
                 "{\"data\": [{\"priceUsd\": \"2222222.00\"}]}"
         );
 
-        CoincapAPI api = new CoincapAPI(mockHttpClient, Formatters.defaultMoneyFormatter);
+        CoincapAPI api = new CoincapAPI(mockHttpClient, defaultMoneyFormatter);
 
         Map<String, BigDecimal> expected = Map.of(
                 "DOGE", new BigDecimal("2222222.00")
@@ -70,7 +71,7 @@ public class CoincapAPITests {
                 "{\"data\": [{\"priceUsd\": \"20.00\"}]}"
         );
 
-        CoincapAPI api = new CoincapAPI(mockHttpClient, Formatters.defaultMoneyFormatter);
+        CoincapAPI api = new CoincapAPI(mockHttpClient, defaultMoneyFormatter);
 
         Map<String, BigDecimal> expected = Map.of(
                 "BTC", new BigDecimal("10.00"),
@@ -81,7 +82,7 @@ public class CoincapAPITests {
 
     @Test
     public void fetchPricesWhenEmptyAssets() {
-        CoincapAPI api = new CoincapAPI(Formatters.defaultMoneyFormatter);
+        CoincapAPI api = new CoincapAPI(defaultMoneyFormatter);
         assertTrue(api.fetchPrices(List.of()).isEmpty());
     }
 }

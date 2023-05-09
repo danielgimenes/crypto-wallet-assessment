@@ -25,16 +25,16 @@ public class WalletReportService {
         Map<String, BigDecimal> currentPrices =
                 assetPriceAPI.fetchPrices(assets.stream().map(CryptoAsset::symbol).toList());
 
-        List<AssetPerformance> performances = WalletPerformance.calculatePerformances(assets, currentPrices);
-        AssetPerformance best = performances.stream().max(Comparator.comparingDouble(AssetPerformance::percent)).orElseThrow();
-        AssetPerformance worst = performances.stream().min(Comparator.comparingDouble(AssetPerformance::percent)).orElseThrow();
+        List<AssetPerformance> performances = WalletPerformance.calculatePerformances(assets, currentPrices, moneyFormatter);
+        AssetPerformance best = performances.stream().max(Comparator.comparingDouble(AssetPerformance::rate)).orElseThrow();
+        AssetPerformance worst = performances.stream().min(Comparator.comparingDouble(AssetPerformance::rate)).orElseThrow();
 
         return new WalletPerformanceReport(
                 WalletPerformance.updatedTotal(assets, currentPrices, moneyFormatter),
                 best.symbol(),
-                best.percent(),
+                best.rate(),
                 worst.symbol(),
-                worst.percent()
+                worst.rate()
         );
     }
 }

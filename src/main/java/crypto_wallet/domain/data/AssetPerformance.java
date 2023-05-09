@@ -1,3 +1,3 @@
 package crypto_wallet.domain.data;
 
-public record AssetPerformance(String symbol, Double percent) {}
+public record AssetPerformance(String symbol, Double rate) {}

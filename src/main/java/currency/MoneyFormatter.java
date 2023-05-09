@@ -13,8 +13,11 @@ public class MoneyFormatter {
 
     private final int fractionDigits;
 
+    public final RoundingMode roundingMode;
+
     public MoneyFormatter(Locale locale, char decimalSeparator, Character groupingSeparator, int fractionDigits, RoundingMode roundingMode) {
         this.fractionDigits = fractionDigits;
+        this.roundingMode = roundingMode;
         DecimalFormatSymbols symbols = new DecimalFormatSymbols(locale);
         symbols.setDecimalSeparator(decimalSeparator);
         formatter = new DecimalFormat();

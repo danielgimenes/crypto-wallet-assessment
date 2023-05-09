@@ -26,8 +26,17 @@ public final class WalletPerformance {
                 .orElseThrow();
     }
 
-    public static List<AssetPerformance> calculatePerformances(List<CryptoAsset> assets, Map<String, BigDecimal> currentPrices) {
-        return assets.stream().map(asset -> new AssetPerformance(asset.symbol(), 100.0)).toList();
+    public static List<AssetPerformance> calculatePerformances(List<CryptoAsset> assets, Map<String, BigDecimal> currentPrices, MoneyFormatter formatter) {
+        return assets.stream()
+                .map(asset -> {
+                    BigDecimal price = currentPrices.get(asset.symbol());
+                    if (price == null) {
+                        throw new RuntimeException(String.format("Price of %s unavailable", asset.symbol()));
+                    }
+                    Double rate = price.divide(asset.price(), formatter.roundingMode).doubleValue(); // rounding already set in price BigDecimal
+                    return new AssetPerformance(asset.symbol(), rate);
+                })
+                .toList();
     }
 
 }
