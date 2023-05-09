@@ -30,22 +30,20 @@ public class CoincapAPI implements AssetPriceAPI {
 
     private final NumberFormatter numberFormatter;
 
-    private static final int PARALLELISM = 3;
-
-    private final ForkJoinPool threadPool = new ForkJoinPool(PARALLELISM);
+    private final ForkJoinPool threadPool;
 
     private static final String SEARCH_ASSET_BASE_URL = "https://api.coincap.io/v2/assets?search=%s&limit=1";
     private static final String ASSET_HISTORY_BASE_URL = "https://api.coincap.io/v2/assets/%s/history?interval=d1&start=1617753600000&end=1617753601000";
     private static final Duration REQUEST_TIMEOUT = Duration.of(10, SECONDS);
 
-    public CoincapAPI(NumberFormatter numberFormatter) {
-        this.httpClient = HttpClient.newHttpClient();
-        this.numberFormatter = numberFormatter;
+    public CoincapAPI(NumberFormatter numberFormatter, int parallelism) {
+        this(HttpClient.newHttpClient(), numberFormatter, parallelism);
     }
 
-    public CoincapAPI(HttpClient httpClient, NumberFormatter numberFormatter) {
+    public CoincapAPI(HttpClient httpClient, NumberFormatter numberFormatter, int parallelism) {
         this.httpClient = httpClient;
         this.numberFormatter = numberFormatter;
+        this.threadPool = new ForkJoinPool(parallelism);
     }
 
     @Override

@@ -14,7 +14,6 @@ import java.io.FileNotFoundException;
 import java.math.RoundingMode;
 import java.text.ParseException;
 import java.util.List;
-import java.util.Locale;
 
 public class ConsoleApp {
 
@@ -25,7 +24,7 @@ public class ConsoleApp {
     private final PerformanceReportWriter performanceReportWriter;
 
     public static void main(String[] args) {
-        String csvFilepath = "src/main/resources/sample_wallet.csv";
+        String csvFilepath = Config.DEFAULT_WALLET_CSV_FILEPATH;
         if (args.length > 0) {
             csvFilepath = args[0];
         }
@@ -37,14 +36,15 @@ public class ConsoleApp {
     }
 
     public ConsoleApp() {
-        NumberFormatter numberFormatter = new NumberFormatter(Locale.US,
-                '.',
-                2,
-                5,
+        NumberFormatter numberFormatter = new NumberFormatter(
+                Config.LOCALE,
+                Config.DECIMAL_SEPARATOR,
+                Config.DOUBLE_FRACTIONAL_DIGITS,
+                Config.MONEY_FRACTIONAL_DIGITS,
                 RoundingMode.HALF_UP
         );
         walletReader = new WalletReader(numberFormatter);
-        AssetPriceAPI api = new CoincapAPI(numberFormatter);
+        AssetPriceAPI api = new CoincapAPI(numberFormatter, Config.FETCH_PRICE_PARALLELISM);
         walletReportService = new WalletReportService(api, numberFormatter);
         performanceReportWriter = new PerformanceReportWriter(numberFormatter);
     }
