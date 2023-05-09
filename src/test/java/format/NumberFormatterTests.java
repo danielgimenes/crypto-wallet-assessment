@@ -9,13 +9,13 @@ import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class MoneyFormatterTests {
+public class NumberFormatterTests {
 
     @Test
     public void parseWhenIntegerNumber() throws ParseException {
         String source = "20000.00";
 
-        MoneyFormatter formatter = new MoneyFormatter(
+        NumberFormatter formatter = new NumberFormatter(
                 Locale.US,
                 '.',
                 ',',
@@ -24,14 +24,14 @@ public class MoneyFormatterTests {
         );
 
         BigDecimal expected = BigDecimal.valueOf(20000.00).setScale(2, RoundingMode.HALF_UP);
-        assertEquals(expected, formatter.parse(source));
+        assertEquals(expected, formatter.parseMoney(source));
     }
 
     @Test
     public void parseWhenCustomSeparator() throws ParseException {
         String source = "20[000@00";
 
-        MoneyFormatter formatter = new MoneyFormatter(
+        NumberFormatter formatter = new NumberFormatter(
                 Locale.US,
                 '@',
                 '[',
@@ -40,14 +40,14 @@ public class MoneyFormatterTests {
         );
 
         BigDecimal expected = BigDecimal.valueOf(20000.00).setScale(2, RoundingMode.HALF_UP);
-        assertEquals(expected, formatter.parse(source));
+        assertEquals(expected, formatter.parseMoney(source));
     }
 
     @Test
     public void parseAndRoundUpWhenFractionalNumber() throws ParseException {
         String source = "20000.06999999999";
 
-        MoneyFormatter formatter = new MoneyFormatter(
+        NumberFormatter formatter = new NumberFormatter(
                 Locale.US,
                 '.',
                 ',',
@@ -56,14 +56,14 @@ public class MoneyFormatterTests {
         );
 
         BigDecimal expected = BigDecimal.valueOf(20000.07).setScale(2, RoundingMode.HALF_UP);
-        assertEquals(expected, formatter.parse(source));
+        assertEquals(expected, formatter.parseMoney(source));
     }
 
     @Test
     public void formatWhenIntegerNumber() {
         BigDecimal source = BigDecimal.valueOf(20000).setScale(2, RoundingMode.HALF_UP);
 
-        MoneyFormatter formatter = new MoneyFormatter(
+        NumberFormatter formatter = new NumberFormatter(
                 Locale.US,
                 '.',
                 ',',
@@ -71,14 +71,14 @@ public class MoneyFormatterTests {
                 RoundingMode.HALF_UP
         );
 
-        assertEquals("20,000.00", formatter.format(source));
+        assertEquals("20,000.00", formatter.formatMoney(source));
     }
 
     @Test
     public void formatWhenGroupingDisabled() {
         BigDecimal source = BigDecimal.valueOf(20000).setScale(2, RoundingMode.HALF_UP);
 
-        MoneyFormatter formatter = new MoneyFormatter(
+        NumberFormatter formatter = new NumberFormatter(
                 Locale.US,
                 '.',
                 null,
@@ -86,14 +86,14 @@ public class MoneyFormatterTests {
                 RoundingMode.HALF_UP
         );
 
-        assertEquals("20000.00", formatter.format(source));
+        assertEquals("20000.00", formatter.formatMoney(source));
     }
 
     @Test
     public void formatWhenFractionalNumber() {
         BigDecimal source = BigDecimal.valueOf(20000.12).setScale(2, RoundingMode.HALF_UP);
 
-        MoneyFormatter formatter = new MoneyFormatter(
+        NumberFormatter formatter = new NumberFormatter(
                 Locale.US,
                 '.',
                 null,
@@ -101,14 +101,14 @@ public class MoneyFormatterTests {
                 RoundingMode.HALF_UP
         );
 
-        assertEquals("20000.12", formatter.format(source));
+        assertEquals("20000.12", formatter.formatMoney(source));
     }
 
     @Test
     public void formatAndRoundUpWhenFractionalNumber() {
         BigDecimal source = BigDecimal.valueOf(20000.12777).setScale(2, RoundingMode.HALF_UP);
 
-        MoneyFormatter formatter = new MoneyFormatter(
+        NumberFormatter formatter = new NumberFormatter(
                 Locale.US,
                 '.',
                 null,
@@ -116,7 +116,7 @@ public class MoneyFormatterTests {
                 RoundingMode.HALF_UP
         );
 
-        assertEquals("20000.13", formatter.format(source));
+        assertEquals("20000.13", formatter.formatMoney(source));
     }
 
 }

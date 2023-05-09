@@ -7,7 +7,7 @@ import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.util.Locale;
 
-public class MoneyFormatter {
+public class NumberFormatter {
 
     private final DecimalFormat formatter;
 
@@ -15,7 +15,7 @@ public class MoneyFormatter {
 
     public final RoundingMode roundingMode;
 
-    public MoneyFormatter(Locale locale, char decimalSeparator, Character groupingSeparator, int fractionDigits, RoundingMode roundingMode) {
+    public NumberFormatter(Locale locale, char decimalSeparator, Character groupingSeparator, int fractionDigits, RoundingMode roundingMode) {
         this.fractionDigits = fractionDigits;
         this.roundingMode = roundingMode;
         DecimalFormatSymbols symbols = new DecimalFormatSymbols(locale);
@@ -32,21 +32,28 @@ public class MoneyFormatter {
         formatter.setMinimumFractionDigits(fractionDigits);
     }
 
-    public BigDecimal parseOrNull(String value) {
+    public BigDecimal parseMoneyOrNull(String value) {
         try {
-            return parse(value);
+            return parseMoney(value);
         } catch (ParseException e) {
             return null;
         }
     }
 
-    public BigDecimal parse(String value) throws ParseException {
+    public BigDecimal parseMoney(String value) throws ParseException {
         return BigDecimal.valueOf(formatter.parse(value).doubleValue())
                 .setScale(fractionDigits, formatter.getRoundingMode());
     }
 
-    public String format(BigDecimal value) {
+    public String formatMoney(BigDecimal value) {
         return formatter.format(value);
+    }
+
+    public Double parseDouble(String value) {
+
+    }
+
+    public String formatDouble(Double double) {
     }
 
 }
