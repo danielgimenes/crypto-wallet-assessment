@@ -2,6 +2,7 @@ package crypto_wallet.domain;
 
 import crypto_wallet.domain.data.AssetPerformance;
 import crypto_wallet.domain.data.CryptoAsset;
+import currency.MoneyFormatter;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -11,11 +12,11 @@ public final class WalletPerformance {
 
     private WalletPerformance() {}
 
-    public static BigDecimal updatedTotal(List<CryptoAsset> assets, Map<String, BigDecimal> currentPrices) {
+    public static BigDecimal updatedTotal(List<CryptoAsset> assets, Map<String, BigDecimal> currentPrices, MoneyFormatter formatter) {
         return assets.stream()
                 .map(asset -> currentPrices.get(asset.symbol()).doubleValue() * asset.quantity())
                 .reduce(Double::sum)
-                .map(BigDecimal::new)
+                .map(total -> formatter.parseOrNull(total.toString()))
                 .orElseThrow();
     }
 

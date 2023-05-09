@@ -3,6 +3,7 @@ package crypto_wallet.domain;
 import crypto_wallet.domain.data.CryptoAsset;
 import crypto_wallet.domain.data.WalletPerformanceReport;
 import org.junit.jupiter.api.Test;
+import test_utils.Formatters;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -23,7 +24,7 @@ public class WalletReportServiceTests {
                 "BTC", new BigDecimal("1000.00"),
                 "ETH", new BigDecimal("2000.00")
         );;
-        WalletReportService service = new WalletReportService(api);
+        WalletReportService service = new WalletReportService(api, Formatters.defaultMoneyFormatter);
 
         WalletPerformanceReport expected = new WalletPerformanceReport(
                 new BigDecimal("4000.00"),

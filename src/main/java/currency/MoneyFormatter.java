@@ -29,6 +29,14 @@ public class MoneyFormatter {
         formatter.setMinimumFractionDigits(fractionDigits);
     }
 
+    public BigDecimal parseOrNull(String value) {
+        try {
+            return parse(value);
+        } catch (ParseException e) {
+            return null;
+        }
+    }
+
     public BigDecimal parse(String value) throws ParseException {
         return BigDecimal.valueOf(formatter.parse(value).doubleValue())
                 .setScale(fractionDigits, formatter.getRoundingMode());
