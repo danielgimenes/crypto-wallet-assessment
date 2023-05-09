@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class WalletPerformanceTests {
 
@@ -41,12 +42,28 @@ public class WalletPerformanceTests {
     }
 
     @Test
-    public void totalValueWhenCurrentPriceUnavailable() {
+    public void totalValueWhenCurrentPriceIsZero() {
+        List<CryptoAsset> assets = List.of(
+                new CryptoAsset("BTC", 10, new BigDecimal("150.00")),
+                new CryptoAsset("ETH", 20, new BigDecimal("180.00"))
+        );
+        Map<String, BigDecimal> prices = Map.of(
+                "BTC", new BigDecimal("0.00"),
+                "ETH", new BigDecimal("0.00")
+        );
 
+        BigDecimal expected = new BigDecimal("0.00");
+        assertEquals(expected, WalletPerformance.updatedTotal(assets, prices, Formatters.defaultMoneyFormatter));
     }
 
     @Test
-    public void totalValueWhenCurrentPriceIsZero() {
+    public void totalValueWhenCurrentPriceUnavailable() {
+        List<CryptoAsset> assets = List.of(
+                new CryptoAsset("BTC", 10, new BigDecimal("150.00"))
+        );
+        Map<String, BigDecimal> prices = Map.of();
 
+        assertThrows(RuntimeException.class,
+                () -> WalletPerformance.updatedTotal(assets, prices, Formatters.defaultMoneyFormatter));
     }
 }

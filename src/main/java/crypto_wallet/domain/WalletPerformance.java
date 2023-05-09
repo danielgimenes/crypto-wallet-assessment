@@ -14,9 +14,15 @@ public final class WalletPerformance {
 
     public static BigDecimal updatedTotal(List<CryptoAsset> assets, Map<String, BigDecimal> currentPrices, MoneyFormatter formatter) {
         return assets.stream()
-                .map(asset -> currentPrices.get(asset.symbol()).doubleValue() * asset.quantity())
+                .map(asset -> {
+                    BigDecimal price = currentPrices.get(asset.symbol());
+                    if (price == null) {
+                        throw new RuntimeException(String.format("Price of %s unavailable", asset.symbol()));
+                    }
+                    return price.doubleValue() * asset.quantity();
+                })
                 .reduce(Double::sum)
-                .map(total -> formatter.parseOrNull(total.toString()))
+                .map(total -> formatter.parseOrNull(String.valueOf(total)))
                 .orElseThrow();
     }
 
