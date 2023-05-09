@@ -21,7 +21,7 @@ public class WalletReportServiceTests {
 
         AssetPriceAPI api = symbols -> Map.of(
                 "BTC", defaultNumberFormatter.parseMoney("56999.9728252053067291")
-        );;
+        );
         WalletReportService service = new WalletReportService(api, defaultNumberFormatter);
 
         WalletPerformanceReport expected = new WalletPerformanceReport(
@@ -44,7 +44,7 @@ public class WalletReportServiceTests {
         AssetPriceAPI api = symbols -> Map.of(
                 "BTC", defaultNumberFormatter.parseMoney("56999.9728252053067291"),
                 "ETH", defaultNumberFormatter.parseMoney("2032.1394325557042107")
-        );;
+        );
         WalletReportService service = new WalletReportService(api, defaultNumberFormatter);
 
         WalletPerformanceReport expected = new WalletPerformanceReport(

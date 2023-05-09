@@ -12,14 +12,12 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.text.ParseException;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.function.Function;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import static java.time.temporal.ChronoUnit.SECONDS;
@@ -51,10 +49,8 @@ public class CoincapAPI implements AssetPriceAPI {
         try {
             return threadPool.submit(() -> symbols.parallelStream().collect(
                     Collectors.toConcurrentMap(Function.identity(), this::fetchAssetPrice))).get();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException("Error fetching prices in parallel", e);
         }
     }
 
@@ -66,19 +62,15 @@ public class CoincapAPI implements AssetPriceAPI {
             // formatters aren't thread-safe! let's clone it before parsing
             NumberFormatter formatter = numberFormatter.clone();
             return formatter.parseMoney(priceRaw);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
+        } catch (IOException | InterruptedException | URISyntaxException e) {
+            throw new RuntimeException(String.format("Error fetching price of '%s'", symbol), e);
         }
     }
 
     private String fetchAssetId(String symbol) throws IOException, InterruptedException, URISyntaxException {
             HttpResponse<String> response = coinbaseAPIJsonGET(String.format(SEARCH_ASSET_BASE_URL, symbol));
             if (response.statusCode() != 200) {
-                throw new RuntimeException();
+                throw new RuntimeException("API response unexpected");
             }
             JSONArray resultArray = new JSONObject(response.body()).getJSONArray("data");
             JSONObject assetJsonObject = resultArray.getJSONObject(0); // results are limited to 1 by query param
@@ -88,7 +80,7 @@ public class CoincapAPI implements AssetPriceAPI {
     private String fetchPrice(String assetId) throws IOException, InterruptedException, URISyntaxException {
         HttpResponse<String> response = coinbaseAPIJsonGET(String.format(ASSET_HISTORY_BASE_URL, assetId));
         if (response.statusCode() != 200) {
-            throw new RuntimeException();
+            throw new RuntimeException("API response unexpected");
         }
         JSONArray resultArray = new JSONObject(response.body()).getJSONArray("data");
         JSONObject assetJsonObject = resultArray.getJSONObject(0);

@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class NumberFormatterTests {
 
     @Test
-    public void parseMoneyWhenIntegerNumber() throws ParseException {
+    public void parseMoneyWhenIntegerNumber() {
         String source = "20000.00";
 
         NumberFormatter formatter = new NumberFormatter(
@@ -28,7 +28,7 @@ public class NumberFormatterTests {
     }
 
     @Test
-    public void parseMoneyWhenCustomSeparator() throws ParseException {
+    public void parseMoneyWhenCustomSeparator() {
         String source = "20000@00";
 
         NumberFormatter formatter = new NumberFormatter(
@@ -44,7 +44,7 @@ public class NumberFormatterTests {
     }
 
     @Test
-    public void parseMoneyAndRoundUpWhenFractionalNumber() throws ParseException {
+    public void parseMoneyAndRoundUpWhenFractionalNumber() {
         String source = "20000.06999999999";
 
         NumberFormatter formatter = new NumberFormatter(

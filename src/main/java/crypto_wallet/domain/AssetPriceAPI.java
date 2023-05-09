@@ -5,5 +5,5 @@ import java.util.List;
 import java.util.Map;
 
 public interface AssetPriceAPI {
-    public Map<String, BigDecimal> fetchPrices(List<String> symbols);
+    Map<String, BigDecimal> fetchPrices(List<String> symbols);
 }

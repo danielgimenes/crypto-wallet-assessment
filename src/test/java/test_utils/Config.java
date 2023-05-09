@@ -4,5 +4,5 @@ public class Config {
 
     private Config() {}
 
-    public static int defaultParallelism = 3;
+    public static final int defaultParallelism = 3;
 }

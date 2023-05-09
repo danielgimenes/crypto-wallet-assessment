@@ -55,7 +55,12 @@ public class ConsoleApp {
             WalletPerformanceReport report = walletReportService.performanceReport(wallet);
             performanceReportWriter.printReport(report);
         } catch (FileNotFoundException | ParseException e) {
-            throw new RuntimeException(e);
+             System.err.println("Invalid CSV file or format");
+             System.exit(1);
+        } catch (RuntimeException e) {
+            System.err.println("Error fetching prices. Details: " + e.getCause());
+            e.printStackTrace(System.err);
+            System.exit(1);
         }
     }
 

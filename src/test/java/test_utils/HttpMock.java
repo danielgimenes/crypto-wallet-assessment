@@ -25,6 +25,7 @@ public final class HttpMock {
                 return urlMatcher.apply(req.uri().toString());
             }
         };
+        @SuppressWarnings("unchecked")
         HttpResponse<Object> mockSearchAssetResponse = mock(HttpResponse.class);
         when(mockSearchAssetResponse.body()).thenReturn(responseBody);
         when(mockSearchAssetResponse.statusCode()).thenReturn(200);
