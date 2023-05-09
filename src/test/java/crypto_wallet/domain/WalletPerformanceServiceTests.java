@@ -1,8 +1,8 @@
 package crypto_wallet.domain;
 
+import crypto_wallet.api.CoincapAPI;
 import crypto_wallet.domain.data.CryptoAsset;
 import crypto_wallet.domain.data.WalletPerformance;
-import crypto_wallet.api.CoinbaseAPI;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -19,7 +19,7 @@ public class WalletPerformanceServiceTests {
         assets.add(new CryptoAsset("BTC", 1, new BigDecimal("1000.00")));
         assets.add(new CryptoAsset("ETH", 2, new BigDecimal("1000.00")));
 
-        WalletPerformanceService walletService = new WalletPerformanceService(new CoinbaseAPI());
+        WalletPerformanceService walletService = new WalletPerformanceService(new CoincapAPI());
         WalletPerformance expected = new WalletPerformance(
                 new BigDecimal("20000.00"),
                 "BTC",

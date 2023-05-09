@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class CoinbaseAPITests {
+public class CoincapAPITests {
 
     @Test
     public void fetchPricesWhenSingleAsset() throws IOException, InterruptedException {
@@ -39,7 +39,7 @@ public class CoinbaseAPITests {
                 "{\"data\": [{\"priceUsd\": \"2222222.00\"}]}"
         );
 
-        CoinbaseAPI api = new CoinbaseAPI(mockHttpClient);
+        CoincapAPI api = new CoincapAPI(mockHttpClient);
 
         Map<String, BigDecimal> expected = Map.of(
                 "DOGE", new BigDecimal("2222222.00")
@@ -76,7 +76,7 @@ public class CoinbaseAPITests {
                 "{\"data\": [{\"priceUsd\": \"20.00\"}]}"
         );
 
-        CoinbaseAPI api = new CoinbaseAPI(mockHttpClient);
+        CoincapAPI api = new CoincapAPI(mockHttpClient);
 
         Map<String, BigDecimal> expected = Map.of(
                 "BTC", new BigDecimal("10.00"),
@@ -100,7 +100,7 @@ public class CoinbaseAPITests {
 
     @Test
     public void fetchPricesWhenEmptyAssets() {
-        CoinbaseAPI api = new CoinbaseAPI();
+        CoincapAPI api = new CoincapAPI();
         assertTrue(api.fetchPrices(List.of()).isEmpty());
     }
 }

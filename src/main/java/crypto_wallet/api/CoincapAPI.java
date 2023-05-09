@@ -22,11 +22,11 @@ import java.util.stream.Collectors;
 
 import static java.time.temporal.ChronoUnit.SECONDS;
 
-public class CoinbaseAPI implements AssetPriceAPI {
+public class CoincapAPI implements AssetPriceAPI {
 
     private final HttpClient httpClient;
 
-    private final Logger logger = Logger.getLogger(CoinbaseAPI.class.getName());
+    private final Logger logger = Logger.getLogger(CoincapAPI.class.getName());
 
     private final ForkJoinPool threadPool = new ForkJoinPool(3);
 
@@ -34,11 +34,11 @@ public class CoinbaseAPI implements AssetPriceAPI {
     private final String ASSET_HISTORY_BASE_URL = "https://api.coincap.io/v2/assets/%s/history?interval=d1&start=1617753600000&end=1617753601000";
     private final Duration REQUEST_TIMEOUT = Duration.of(10, SECONDS);
 
-    public CoinbaseAPI() {
+    public CoincapAPI() {
         this.httpClient = HttpClient.newHttpClient();
     }
 
-    public CoinbaseAPI(HttpClient httpClient) {
+    public CoincapAPI(HttpClient httpClient) {
         this.httpClient = httpClient;
     }
 
