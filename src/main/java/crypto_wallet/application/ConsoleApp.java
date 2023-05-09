@@ -25,11 +25,15 @@ public class ConsoleApp {
     private final PerformanceReportWriter performanceReportWriter;
 
     public static void main(String[] args) {
-        if (!new File(args[0]).canRead()) {
-            System.err.printf("Can't read file at '%s'. Be sure it is a valid wallet CSV file.", args[0]);
+        String csvFilepath = "src/main/resources/sample_wallet.csv";
+        if (args.length > 0) {
+            csvFilepath = args[0];
+        }
+        if (!new File(csvFilepath).canRead()) {
+            System.err.printf("Can't read file at '%s'. Be sure it is a path to a valid CSV file.", csvFilepath);
             return;
         }
-        new ConsoleApp().walletPerformanceReport(args[0]);
+        new ConsoleApp().walletPerformanceReport(csvFilepath);
     }
 
     public ConsoleApp() {
