@@ -1,7 +1,6 @@
 package crypto_wallet.api;
 
 import org.junit.jupiter.api.Test;
-import test_utils.Formatters;
 
 import java.io.IOException;
 import java.math.BigDecimal;
