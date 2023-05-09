@@ -10,6 +10,23 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ConsoleAppIntegrationTests {
 
     @Test
+    public void walletPerformanceWhenSingleAssets() throws IOException {
+        String path = createTempFileWithContent(
+                """
+                symbol,quantity,price
+                BTC,0.12345,37870.5058
+                """
+        );
+        final ByteArrayOutputStream output = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(output));
+
+        ConsoleApp.main(new String[] { path });
+
+        String expectedPrint = "total=7036.65,best_asset=BTC,best_performance=1.51,worst_asset=BTC,worst_performance=1.51\n";
+        assertEquals(expectedPrint, output.toString());
+    }
+
+    @Test
     public void walletPerformanceWhenMultipleAssets() throws IOException {
         String path = createTempFileWithContent(
                 """
@@ -23,7 +40,7 @@ public class ConsoleAppIntegrationTests {
 
         ConsoleApp.main(new String[] { path });
 
-        String expectedPrint = "total=16984.62,best_asset=BTC,best_performance=1.51,worst_asset=ETH,worst_performance=1.01";
+        String expectedPrint = "total=16984.62,best_asset=BTC,best_performance=1.51,worst_asset=ETH,worst_performance=1.01\n";
         assertEquals(expectedPrint, output.toString());
     }
 

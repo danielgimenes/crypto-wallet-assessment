@@ -2,7 +2,7 @@ package crypto_wallet.application.io;
 
 import crypto_wallet.application.adapter.CryptoAssetAdapter;
 import crypto_wallet.domain.data.CryptoAsset;
-import currency.MoneyFormatter;
+import format.NumberFormatter;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,8 +15,8 @@ public class WalletReader {
 
     private final CryptoAssetAdapter adapter;
 
-    public WalletReader(MoneyFormatter moneyFormatter) {
-        this.adapter = new CryptoAssetAdapter(moneyFormatter);
+    public WalletReader(NumberFormatter numberFormatter) {
+        this.adapter = new CryptoAssetAdapter(numberFormatter);
     }
 
     public List<CryptoAsset> readAssetsFromCSV(String csvFilepath) throws FileNotFoundException, ParseException {

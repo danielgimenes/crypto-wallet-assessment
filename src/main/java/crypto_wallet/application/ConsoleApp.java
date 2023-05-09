@@ -7,7 +7,7 @@ import crypto_wallet.domain.AssetPriceAPI;
 import crypto_wallet.domain.WalletReportService;
 import crypto_wallet.domain.data.CryptoAsset;
 import crypto_wallet.domain.data.WalletPerformanceReport;
-import currency.MoneyFormatter;
+import format.NumberFormatter;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -33,16 +33,16 @@ public class ConsoleApp {
     }
 
     public ConsoleApp() {
-        MoneyFormatter moneyFormatter = new MoneyFormatter(Locale.US,
+        NumberFormatter numberFormatter = new NumberFormatter(Locale.US,
                 '.',
-                null,
                 2,
+                5,
                 RoundingMode.HALF_UP
         );
-        walletReader = new WalletReader(moneyFormatter);
-        AssetPriceAPI api = new CoincapAPI(moneyFormatter);
-        walletReportService = new WalletReportService(api, moneyFormatter);
-        performanceReportWriter = new PerformanceReportWriter(moneyFormatter);
+        walletReader = new WalletReader(numberFormatter);
+        AssetPriceAPI api = new CoincapAPI(numberFormatter);
+        walletReportService = new WalletReportService(api, numberFormatter);
+        performanceReportWriter = new PerformanceReportWriter(numberFormatter);
     }
 
     private void walletPerformanceReport(String csvFilepath) {

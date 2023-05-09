@@ -3,7 +3,6 @@ package crypto_wallet.domain;
 import crypto_wallet.domain.data.CryptoAsset;
 import crypto_wallet.domain.data.WalletPerformanceReport;
 import org.junit.jupiter.api.Test;
-import test_utils.Formatters;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -17,13 +16,13 @@ public class WalletReportServiceTests {
     @Test
     public void performanceReportWhenSingleAssets() {
         List<CryptoAsset> assets = List.of(
-                new CryptoAsset("BTC", 0.12345, defaultMoneyFormatter.parseOrNull("37870.5058"))
+                new CryptoAsset("BTC", 0.12345, defaultNumberFormatter.parseMoneyOrNull("37870.5058"))
         );
 
         AssetPriceAPI api = symbols -> Map.of(
-                "BTC", defaultMoneyFormatter.parseOrNull("56999.9728252053067291")
+                "BTC", defaultNumberFormatter.parseMoneyOrNull("56999.9728252053067291")
         );;
-        WalletReportService service = new WalletReportService(api, defaultMoneyFormatter);
+        WalletReportService service = new WalletReportService(api, defaultNumberFormatter);
 
         WalletPerformanceReport expected = new WalletPerformanceReport(
                 new BigDecimal("7036.65"),
@@ -38,15 +37,15 @@ public class WalletReportServiceTests {
     @Test
     public void performanceReportWhenMultipleAssets() {
         List<CryptoAsset> assets = List.of(
-            new CryptoAsset("BTC", 0.12345, defaultMoneyFormatter.parseOrNull("37870.5058")),
-            new CryptoAsset("ETH", 4.89532, defaultMoneyFormatter.parseOrNull("2004.9774"))
+            new CryptoAsset("BTC", 0.12345, defaultNumberFormatter.parseMoneyOrNull("37870.5058")),
+            new CryptoAsset("ETH", 4.89532, defaultNumberFormatter.parseMoneyOrNull("2004.9774"))
         );
 
         AssetPriceAPI api = symbols -> Map.of(
-                "BTC", defaultMoneyFormatter.parseOrNull("56999.9728252053067291"),
-                "ETH", defaultMoneyFormatter.parseOrNull("2032.1394325557042107")
+                "BTC", defaultNumberFormatter.parseMoneyOrNull("56999.9728252053067291"),
+                "ETH", defaultNumberFormatter.parseMoneyOrNull("2032.1394325557042107")
         );;
-        WalletReportService service = new WalletReportService(api, defaultMoneyFormatter);
+        WalletReportService service = new WalletReportService(api, defaultNumberFormatter);
 
         WalletPerformanceReport expected = new WalletPerformanceReport(
                 new BigDecimal("16984.62"),

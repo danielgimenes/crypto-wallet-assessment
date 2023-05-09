@@ -10,7 +10,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static test_utils.Formatters.defaultMoneyFormatter;
+import static test_utils.Formatters.defaultNumberFormatter;
 
 public class WalletPerformanceTests {
 
@@ -24,7 +24,7 @@ public class WalletPerformanceTests {
         );
 
         BigDecimal expected = new BigDecimal("400000.00");
-        assertEquals(expected, WalletPerformance.updatedTotal(assets, prices, defaultMoneyFormatter));
+        assertEquals(expected, WalletPerformance.updatedTotal(assets, prices, defaultNumberFormatter));
     }
 
     @Test
@@ -39,7 +39,7 @@ public class WalletPerformanceTests {
         );
 
         BigDecimal expected = new BigDecimal("700000.00");
-        assertEquals(expected, WalletPerformance.updatedTotal(assets, prices, defaultMoneyFormatter));
+        assertEquals(expected, WalletPerformance.updatedTotal(assets, prices, defaultNumberFormatter));
     }
 
     @Test
@@ -54,7 +54,7 @@ public class WalletPerformanceTests {
         );
 
         BigDecimal expected = new BigDecimal("0.00");
-        assertEquals(expected, WalletPerformance.updatedTotal(assets, prices, defaultMoneyFormatter));
+        assertEquals(expected, WalletPerformance.updatedTotal(assets, prices, defaultNumberFormatter));
     }
 
     @Test
@@ -65,7 +65,7 @@ public class WalletPerformanceTests {
         Map<String, BigDecimal> prices = Map.of();
 
         assertThrows(RuntimeException.class,
-                () -> WalletPerformance.updatedTotal(assets, prices, defaultMoneyFormatter));
+                () -> WalletPerformance.updatedTotal(assets, prices, defaultNumberFormatter));
     }
 
     @Test
@@ -80,7 +80,7 @@ public class WalletPerformanceTests {
         List<AssetPerformance> expected = List.of(
                 new AssetPerformance("BTC", 3.0)
         );
-        assertEquals(expected, WalletPerformance.calculatePerformances(assets, prices, defaultMoneyFormatter));
+        assertEquals(expected, WalletPerformance.calculatePerformances(assets, prices, defaultNumberFormatter));
     }
 
     @Test
@@ -98,7 +98,7 @@ public class WalletPerformanceTests {
             new AssetPerformance("BTC", 1.5),
             new AssetPerformance("ETH", 1.33)
         );
-        assertEquals(expected, WalletPerformance.calculatePerformances(assets, prices, defaultMoneyFormatter));
+        assertEquals(expected, WalletPerformance.calculatePerformances(assets, prices, defaultNumberFormatter));
     }
 
     @Test
@@ -116,7 +116,7 @@ public class WalletPerformanceTests {
                 new AssetPerformance("BTC", 0.0),
                 new AssetPerformance("ETH", 0.0)
         );
-        assertEquals(expected, WalletPerformance.calculatePerformances(assets, prices, defaultMoneyFormatter));
+        assertEquals(expected, WalletPerformance.calculatePerformances(assets, prices, defaultNumberFormatter));
     }
 
     @Test
@@ -128,6 +128,6 @@ public class WalletPerformanceTests {
         Map<String, BigDecimal> prices = Map.of();
 
         assertThrows(RuntimeException.class,
-                () -> WalletPerformance.calculatePerformances(assets, prices, defaultMoneyFormatter));
+                () -> WalletPerformance.calculatePerformances(assets, prices, defaultNumberFormatter));
     }
 }

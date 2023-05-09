@@ -1,18 +1,18 @@
 package crypto_wallet.application.adapter;
 
 import crypto_wallet.domain.data.CryptoAsset;
-import currency.MoneyFormatter;
+import format.NumberFormatter;
 
 import java.text.ParseException;
 
 public class CryptoAssetAdapter {
-    private final MoneyFormatter moneyFormatter;
+    private final NumberFormatter numberFormatter;
 
-    public CryptoAssetAdapter(MoneyFormatter moneyFormatter) {
-        this.moneyFormatter = moneyFormatter;
+    public CryptoAssetAdapter(NumberFormatter numberFormatter) {
+        this.numberFormatter = numberFormatter;
     }
 
     public CryptoAsset toModel(String symbol, String quantity, String price) throws ParseException {
-        return new CryptoAsset(symbol, Double.parseDouble(quantity), moneyFormatter.parse(price));
+        return new CryptoAsset(symbol, numberFormatter.parseDouble(quantity), numberFormatter.parseMoney(price));
     }
 }

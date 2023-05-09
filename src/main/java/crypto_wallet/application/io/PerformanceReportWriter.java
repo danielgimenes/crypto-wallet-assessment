@@ -1,23 +1,23 @@
 package crypto_wallet.application.io;
 
 import crypto_wallet.domain.data.WalletPerformanceReport;
-import currency.MoneyFormatter;
+import format.NumberFormatter;
 
 public class PerformanceReportWriter {
-    private final MoneyFormatter moneyFormatter;
+    private final NumberFormatter numberFormatter;
 
-    public PerformanceReportWriter(MoneyFormatter moneyFormatter) {
-        this.moneyFormatter = moneyFormatter;
+    public PerformanceReportWriter(NumberFormatter numberFormatter) {
+        this.numberFormatter = numberFormatter;
     }
 
     public void printReport(WalletPerformanceReport report) {
         System.out.printf(
-                "total=%s,best_asset=%s,best_performance=%f,worst_asset=%s,worst_performance=%f\n",
-                moneyFormatter.format(report.total()),
+                "total=%s,best_asset=%s,best_performance=%s,worst_asset=%s,worst_performance=%s\n",
+                numberFormatter.formatMoney(report.total()),
                 report.bestAsset(),
-                report.bestPerformance(),
+                numberFormatter.formatDouble(report.bestPerformance(), 2),
                 report.worstAsset(),
-                report.worstPerformance()
+                numberFormatter.formatDouble(report.worstPerformance(), 2)
         );
     }
 }

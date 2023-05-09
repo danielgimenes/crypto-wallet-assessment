@@ -3,7 +3,7 @@ package crypto_wallet.domain;
 import crypto_wallet.domain.data.AssetPerformance;
 import crypto_wallet.domain.data.CryptoAsset;
 import crypto_wallet.domain.data.WalletPerformanceReport;
-import currency.MoneyFormatter;
+import format.NumberFormatter;
 
 import java.math.BigDecimal;
 import java.util.Comparator;
@@ -14,23 +14,23 @@ public class WalletReportService {
 
     private final AssetPriceAPI assetPriceAPI;
 
-    private final MoneyFormatter moneyFormatter;
+    private final NumberFormatter numberFormatter;
 
-    public WalletReportService(AssetPriceAPI assetPriceAPI, MoneyFormatter moneyFormatter) {
+    public WalletReportService(AssetPriceAPI assetPriceAPI, NumberFormatter numberFormatter) {
         this.assetPriceAPI = assetPriceAPI;
-        this.moneyFormatter = moneyFormatter;
+        this.numberFormatter = numberFormatter;
     }
 
     public WalletPerformanceReport performanceReport(List<CryptoAsset> assets) {
         Map<String, BigDecimal> currentPrices =
                 assetPriceAPI.fetchPrices(assets.stream().map(CryptoAsset::symbol).toList());
 
-        List<AssetPerformance> performances = WalletPerformance.calculatePerformances(assets, currentPrices, moneyFormatter);
+        List<AssetPerformance> performances = WalletPerformance.calculatePerformances(assets, currentPrices, numberFormatter);
         AssetPerformance best = performances.stream().max(Comparator.comparingDouble(AssetPerformance::rate)).orElseThrow();
         AssetPerformance worst = performances.stream().min(Comparator.comparingDouble(AssetPerformance::rate)).orElseThrow();
 
         return new WalletPerformanceReport(
-                WalletPerformance.updatedTotal(assets, currentPrices, moneyFormatter),
+                WalletPerformance.updatedTotal(assets, currentPrices, numberFormatter),
                 best.symbol(),
                 best.rate(),
                 worst.symbol(),

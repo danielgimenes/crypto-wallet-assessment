@@ -1,7 +1,7 @@
 package crypto_wallet.api;
 
 import crypto_wallet.domain.AssetPriceAPI;
-import currency.MoneyFormatter;
+import format.NumberFormatter;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -28,7 +28,7 @@ public class CoincapAPI implements AssetPriceAPI {
 
     private final HttpClient httpClient;
 
-    private final MoneyFormatter moneyFormatter;
+    private final NumberFormatter numberFormatter;
 
     private final Logger logger = Logger.getLogger(CoincapAPI.class.getName());
 
@@ -38,14 +38,14 @@ public class CoincapAPI implements AssetPriceAPI {
     private final String ASSET_HISTORY_BASE_URL = "https://api.coincap.io/v2/assets/%s/history?interval=d1&start=1617753600000&end=1617753601000";
     private final Duration REQUEST_TIMEOUT = Duration.of(10, SECONDS);
 
-    public CoincapAPI(MoneyFormatter moneyFormatter) {
+    public CoincapAPI(NumberFormatter numberFormatter) {
         this.httpClient = HttpClient.newHttpClient();
-        this.moneyFormatter = moneyFormatter;
+        this.numberFormatter = numberFormatter;
     }
 
-    public CoincapAPI(HttpClient httpClient, MoneyFormatter moneyFormatter) {
+    public CoincapAPI(HttpClient httpClient, NumberFormatter numberFormatter) {
         this.httpClient = httpClient;
-        this.moneyFormatter = moneyFormatter;
+        this.numberFormatter = numberFormatter;
     }
 
     @Override
@@ -68,7 +68,7 @@ public class CoincapAPI implements AssetPriceAPI {
             String assetId = fetchAssetId(symbol);
             logger.info(String.format("[%s] '%s' asset id is '%s'", Thread.currentThread().getName(), symbol, assetId));
 
-            BigDecimal price = moneyFormatter.parse(fetchPrice(assetId));
+            BigDecimal price = numberFormatter.parseMoney(fetchPrice(assetId));
             long elapsed = System.currentTimeMillis() - start;
             logger.info(String.format("[%s] got '%s' price of %s after %d ms", Thread.currentThread().getName(), symbol, price.toString(), elapsed));
             return price;
