@@ -18,7 +18,7 @@ Sample output:
 total=21694.72,best_asset=XRP,best_performance=2.37,worst_asset=DOGE,worst_performance=0.20
 ```
 
-This project is part of a take-home assessment for a selection process. The requirements are described in [this PDF document]("doc/CodeChallenge-CryptoWallet.pdf").
+This project is part of a take-home assessment for a selection process. The requirements are described in [this PDF document](doc/CodeChallenge-CryptoWallet.pdf).
 
 ## Design decisions
 
