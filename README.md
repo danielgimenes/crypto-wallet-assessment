@@ -27,8 +27,11 @@ This project is part of a take-home assessment for a selection process. The requ
  - as part of the requirements, I've added parallelism on fetching the prices with a concurrency of 3 threads. This is done using a custom thread pool that is used by `parallelStream()` on `CoincapAPI`.
  - error handling is done in a broad sense. I've tried to separate file reading, parsing and fetching errors to facilitate debugging. Other than that, every failure is fatal and exits the program with an error message.
  - the price request uses history API of Coincap with a fixated datetime. This is to follow a requirement set of the challenge to facilitate validating the solution correctness.
+ - The CSV and JSON parsing were built having simplicity in mind and using the lightest of libraries, if any. In a more complex scenario or long term solution, I would probably use `commons-csv` and `gson`, as they are more robust and deal with unexpected cases that would still be valid (like ';' as the CSV separator).  
 
 ## Dependencies
+
+This program was built with `Java 17`, and uses the following libraries and plugins:
 
 - `json org` lib: used to parse the responses of Coincap API
 - `junit`: to build automated unit and integration tests
