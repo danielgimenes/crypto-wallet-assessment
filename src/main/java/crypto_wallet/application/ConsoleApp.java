@@ -54,7 +54,7 @@ public class ConsoleApp {
             List<CryptoAsset> wallet = walletReader.readAssetsFromCSV(csvFilepath);
             WalletPerformanceReport report = walletReportService.performanceReport(wallet);
             performanceReportWriter.printReport(report);
-        } catch (FileNotFoundException | ParseException e) {
+        } catch (FileNotFoundException e) {
              System.err.println("Invalid CSV file or format");
              System.exit(1);
         } catch (RuntimeException e) {

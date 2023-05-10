@@ -12,7 +12,11 @@ public class CryptoAssetAdapter {
         this.numberFormatter = numberFormatter;
     }
 
-    public CryptoAsset toModel(String symbol, String quantity, String price) throws ParseException {
-        return new CryptoAsset(symbol, numberFormatter.parseDouble(quantity), numberFormatter.parseMoney(price));
+    public CryptoAsset toModel(String symbol, String quantity, String price) {
+        try {
+            return new CryptoAsset(symbol, numberFormatter.parseDouble(quantity), numberFormatter.parseMoney(price));
+        } catch (ParseException e) {
+            throw new RuntimeException(String.format("Invalid crypto asset data. symbol: '%s', quantity: '%s', price: '%s'", symbol, quantity, price));
+        }
     }
 }

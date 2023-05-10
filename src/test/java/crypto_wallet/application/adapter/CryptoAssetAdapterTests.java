@@ -47,7 +47,7 @@ class CryptoAssetAdapterTests {
         String price = "eita";
         CryptoAssetAdapter adapter = new CryptoAssetAdapter(defaultNumberFormatter);
 
-        assertThrows(ParseException.class,
+        assertThrows(RuntimeException.class,
                 () -> adapter.toModel(symbol, quantity, price));
     }
 
